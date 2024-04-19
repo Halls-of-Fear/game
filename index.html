@@ -102,9 +102,9 @@
                 guard = false;
                 choices.innerHTML = '<button onclick="goToFinalRoom()">Go to final room</button>';
             } else {
-                output.textContent = 'You attacked the guard but you don\'t have a sword. You died.';
-                choices.innerHTML = '';
-                sword = false;
+                output.textContent = 'You attacked the guard but you don\'t have a sword. You died. Wana try again?';
+                choices.innerHTML = '<button onclick="endGame()">SURE!</button>';
+                //sword = false;
             }
         }
 
