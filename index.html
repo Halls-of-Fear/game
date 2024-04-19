@@ -1,1 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dungeon Escape</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        #game {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10%;
+            text-align: center;
+        }
+        #output {
+            margin-bottom: 20px;
+        }
+        #choices {
+            display: inline-block;
+        }
+        button {
+            margin: 0 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="output"></div>
+        <div id="choices"></div>
+    </div>
 
+    <script>
+        var sword = false;
+        var key = false;
+        var guard = true
+        var output = document.getElementById('output');
+        var choices = document.getElementById('choices');
+
+        function startGame() {
+            output.textContent = 'You are at the start of the dungeon. You see two doors.';
+            choices.innerHTML = '<button onclick="chooseDoor(1)">Door 1</button> <button onclick="chooseDoor(2)">Door 2</button>';
+        }
+
+        function chooseDoor(door) {
+            if (door === 1) {
+                output.textContent = 'You chose door 1. You found a chest.';
+                choices.innerHTML = '<button onclick="openChest()">Open chest</button> <button onclick="goBack()">Go back</button>';
+            } else if (door === 2) {
+                output.textContent = 'You chose door 2. You can go ahead.';
+                choices.innerHTML = '<button onclick="goAhead()">Go ahead</button>';
+            }
+        }
+
+        function openChest() {
+            if (sword === false) {
+                sword = true;
+                output.textContent = 'You opened the chest. You found a sword.';
+                choices.innerHTML = '<button onclick="startGame()">Go back</button>';
+                
+            } else {
+                output.textContent = 'You opened the chest. But it is empty!';
+                choices.innerHTML = '<button onclick="startGame()">Go back</button>';
+            }
+        }
+
+        function goAhead() {
+            if (guard === true) {
+                    output.textContent = 'You went ahead. You see a guard.';
+                    choices.innerHTML = '<button onclick="sneak()">Sneak</button> <button onclick="attack()">Attack</button> <button onclick="startGame()">go back</button>';
+                    
+                } else {
+                    output.textContent = 'You have already killed guard and take the key. No need to be here';
+                    choices.innerHTML = '<button onclick="goToFinalRoom()">Just go final room already!</button>';
+                }
+        }
+        function sneak() {
+            output.textContent = 'You sneaked past the guard.';
+            key = false;
+            choices.innerHTML = '<button onclick="goToFinalRoom()">Go to final room</button>';
+        }
+
+        function attack() {
+            if (sword) {
+                output.textContent = 'You attacked the guard and killed him.';
+                key = true;
+                guard = false;
+                choices.innerHTML = '<button onclick="goToFinalRoom()">Go to final room</button>';
+            } else {
+                output.textContent = 'You attacked the guard but you don\'t have a sword. You died.';
+                choices.innerHTML = '';
+                sword = false;
+            }
+        }
+
+        function goToFinalRoom() {
+            output.textContent = 'You reached the final room. What do you want to do with the final door?';
+            choices.innerHTML = '<button onclick="tryOpenDoor()">Open the door</button> <button onclick="forceOpenDoor()">Force open the door</button> <button onclick="goAhead()">Go back</button>';
+        }
+
+        function tryOpenDoor() {
+            if (key) {
+                output.textContent = 'You opened the final door and escaped the dungeon. Wana try again?';
+                choices.innerHTML = '<button onclick="endGame()">SURE!</button>';
+            } else {
+                output.textContent = 'You tried to open the final door but you don\'t have the key.';
+                choices.innerHTML = '<button onclick="goToFinalRoom()">Go to final room</button>';
+            }
+        }
+
+        function forceOpenDoor() {
+            if (sword) {
+                output.textContent = 'You opened the final door by force and escaped the dungeon. Wana try again?';
+                choices.innerHTML = '<button onclick="endGame()">SURE!</button>';
+            } else {
+                output.textContent = 'You tried to force open the final door but you don\'t have a sword.';
+                choices.innerHTML = '<button onclick="goToFinalRoom()">Go to final room</button>';
+            }
+        }
+        
+        function endGame() {
+            location.reload();
+        }
+    
+        startGame();
+    </script>
+</body>
+</html>
